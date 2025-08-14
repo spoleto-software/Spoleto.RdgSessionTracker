@@ -15,9 +15,9 @@ It is designed for scenarios where you need to track when users connect/disconne
   - **Client IP address**
   - **Remote resource name**
   - **Session duration (seconds)**
-- Groups events by user per day.
+- Groups events by user.
 - Calculates:
-  - **Total working time** for the day (sum of all session durations).
+  - **Total working time** for the user (sum of all session durations).
   - **Start of the working day** = `Last disconnect - Total duration`.
   - **End of the working day** = `Last disconnect`.
 - Handles duplicate events for the same disconnect (different protocols, same time) — processes only the first unique event.
