@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36121.58
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spoleto.RdgSessionTracker", "src\Spoleto.RdgSessionTracker\Spoleto.RdgSessionTracker.csproj", "{E4299671-AA2D-46D9-A8EA-C72F31A6A884}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		src\Directory.Build.props = src\Directory.Build.props
+		LICENSE = LICENSE
+		publish-assets-to-github.sh = publish-assets-to-github.sh
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub Actions", "GitHub Actions", "{4A51D07C-8067-4579-B39A-38F542D96920}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\cd.yml = .github\workflows\cd.yml
+		.github\workflows\ci.yml = .github\workflows\ci.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spoleto.RdgSessionTracker.Tests", "src\Spoleto.RdgSessionTracker.Tests\Spoleto.RdgSessionTracker.Tests.csproj", "{4B7E84E5-02F1-47D0-BC96-589E524DE323}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4299671-AA2D-46D9-A8EA-C72F31A6A884}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4299671-AA2D-46D9-A8EA-C72F31A6A884}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4299671-AA2D-46D9-A8EA-C72F31A6A884}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4299671-AA2D-46D9-A8EA-C72F31A6A884}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B7E84E5-02F1-47D0-BC96-589E524DE323}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B7E84E5-02F1-47D0-BC96-589E524DE323}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B7E84E5-02F1-47D0-BC96-589E524DE323}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B7E84E5-02F1-47D0-BC96-589E524DE323}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BDDE6414-03FB-45C4-A5EC-D9602B161418}
+	EndGlobalSection
+EndGlobal

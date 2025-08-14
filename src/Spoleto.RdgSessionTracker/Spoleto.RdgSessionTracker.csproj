@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+
+    <!-- Package info -->
+    <PropertyGroup>
+        <Title>Spoleto.RdgSessionTracker</Title>
+        <PackageId>Spoleto.RdgSessionTracker</PackageId>
+        <PackageTags>Remote Desktop;RD Gateway;RDP;Windows Event Log;EventLog;Remote Access;Session Tracking;RDG</PackageTags>
+        <Description>C# SDK for reading Microsoft Remote Desktop Gateway (RDG) session events from the Windows Event Log.</Description>
+    </PropertyGroup>
+    <ItemGroup>
+      <PackageReference Include="System.Diagnostics.EventLog" Version="8.0.2" />
+    </ItemGroup>
+
+</Project>
