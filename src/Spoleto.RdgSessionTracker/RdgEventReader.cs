@@ -97,12 +97,17 @@ namespace Spoleto.RdgSessionTracker
                     foreach (var ev in group)
                     {
                         if (last != null &&
-                            Math.Abs((ev.DisconnectTime - last.DisconnectTime).TotalSeconds) <= 5 &&
-                            Math.Abs(ev.DurationSeconds - last.DurationSeconds) <= 10)
+                            Math.Abs((ev.DisconnectTime - last.DisconnectTime).TotalMinutes) <= 3D &&
+                            ev.Protocol != last.Protocol)
                         {
+                            // Prefer event with max duration:
+                            if (ev.DurationSeconds > last.DurationSeconds)
+                                result[^1] = ev;
+
                             // duplicate, skip
                             continue;
                         }
+
                         result.Add(ev);
                         last = ev;
                     }
