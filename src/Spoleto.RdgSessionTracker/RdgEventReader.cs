@@ -84,32 +84,46 @@ namespace Spoleto.RdgSessionTracker
         /// Removes near-duplicate events (same user, same disconnect time +/- 5 sec, almost same duration)
         /// Keeps the first one.
         /// </summary>
-        private List<RdgEvent> Deduplicate(List<RdgEvent> events)
+        private static List<RdgEvent> Deduplicate(List<RdgEvent> events)
         {
             return events
-                .OrderBy(e => e.DisconnectTime)
+                .OrderBy(e => e.ConnectTime)
                 .GroupBy(e => e.UserName.ToLowerInvariant())
                 .SelectMany(group =>
                 {
                     var result = new List<RdgEvent>();
-                    RdgEvent last = null;
 
-                    foreach (var ev in group)
+                    foreach (var current in group)
                     {
-                        if (last != null &&
-                            Math.Abs((ev.DisconnectTime - last.DisconnectTime).TotalMinutes) <= 3D &&
-                            ev.Protocol != last.Protocol)
-                        {
-                            // Prefer event with max duration:
-                            if (ev.DurationSeconds > last.DurationSeconds)
-                                result[^1] = ev;
+                        bool overlapFound = false;
 
-                            // duplicate, skip
-                            continue;
+                        for (int i = 0; i < result.Count; i++)
+                        {
+                            var existing = result[i];
+
+                            // check time overlap
+                            bool overlap =
+                                current.ConnectTime < existing.DisconnectTime
+                                && existing.ConnectTime < current.DisconnectTime;
+
+                            if (overlap)
+                            {
+                                overlapFound = true;
+
+                                // keep the longest
+                                if (current.DurationSeconds > existing.DurationSeconds)
+                                {
+                                    result[i] = current;
+                                }
+
+                                break;
+                            }
                         }
 
-                        result.Add(ev);
-                        last = ev;
+                        if (!overlapFound)
+                        {
+                            result.Add(current);
+                        }
                     }
 
                     return result;
@@ -120,7 +134,7 @@ namespace Spoleto.RdgSessionTracker
         /// <summary>
         /// Gets for each user: earliest start (computed as last disconnect - total duration) and last disconnect.
         /// </summary>
-        public List<UserDailySession> GetDailySessions(DateTime since, DateTime to, string? machineName = null)
+        public List<UserSummarySession> GetSummarySessions(DateTime since, DateTime to, string? machineName = null)
         {
             var events = GetEvents(since, to, machineName);
 
@@ -131,7 +145,7 @@ namespace Spoleto.RdgSessionTracker
                     var totalDuration = TimeSpan.FromSeconds(g.Sum(e => e.DurationSeconds));
                     var lastDisconnect = g.Max(e => e.DisconnectTime);
                     var start = lastDisconnect - totalDuration;
-                    return new UserDailySession(g.Key, start, lastDisconnect, totalDuration);
+                    return new UserSummarySession(g.Key, start, lastDisconnect, totalDuration);
                 })
                 .ToList();
         }

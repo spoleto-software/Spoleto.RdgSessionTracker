@@ -1,6 +1,6 @@
 # Spoleto.RdgSessionTracker
 
-**Spoleto.RdgSessionTracker** is a .NET library for reading **Remote Desktop Gateway** (RD Gateway) session disconnect events from the Windows Event Log and calculating **user daily working time** based on session durations.
+**Spoleto.RdgSessionTracker** is a .NET library for reading **Remote Desktop Gateway** (RD Gateway) session disconnect events from the Windows Event Log and calculating **user summary working time** based on session durations.
 
 It is designed for scenarios where you need to track when users connect/disconnect through an RD Gateway and store the calculated working periods in a database or reporting system.
 
@@ -42,14 +42,14 @@ foreach (var session in events)
     Console.WriteLine($"{session.Date:yyyy-MM-dd} | {session.UserName} | Start: {session.Start} | End: {session.End} | Total: {session.TotalDuration}");
 }	
 
-// Calculate per-user daily sessions (start, end, total duration)
-var dailySessions = reader.GetDailySessions(
+// Calculate per-user summary sessions (start, end, total duration)
+var summarySessions = reader.GetSummarySessions(
     since: DateTime.Today.AddDays(-1),
     to: DateTime.Today,
     machineName: "sv-server" // set to null for local machine
 	);
 
-foreach (var session in dailySessions)
+foreach (var session in summarySessions)
 {
     Console.WriteLine(
         $"{session.UserName}: Start={session.Start}, End={session.End}, Total={session.TotalDuration}"

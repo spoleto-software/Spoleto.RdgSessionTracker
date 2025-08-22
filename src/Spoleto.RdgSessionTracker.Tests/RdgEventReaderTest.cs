@@ -15,7 +15,7 @@
             var option = ConfigurationHelper.GetTestOption();
 
             // Act
-            var sessions = reader.GetDailySessions(option.Since, option.To, option.MachineName);
+            var sessions = reader.GetSummarySessions(option.Since, option.To, option.MachineName);
 
             // Assert
             Assert.That(sessions, Is.Not.Null);

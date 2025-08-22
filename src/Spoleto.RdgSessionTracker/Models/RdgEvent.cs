@@ -8,5 +8,8 @@
             string Resource,
             int DurationSeconds,
             string Protocol
-        );
+        )
+    {
+        public DateTime ConnectTime => DisconnectTime.AddSeconds(-DurationSeconds);
+    }
 }

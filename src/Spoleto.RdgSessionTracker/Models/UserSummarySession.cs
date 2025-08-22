@@ -1,6 +1,6 @@
 ﻿namespace Spoleto.RdgSessionTracker.Models
 {
-    public record UserDailySession
+    public record UserSummarySession
         (string UserName,
         DateTime Start,
         DateTime End,
