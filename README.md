@@ -37,9 +37,9 @@ var events = reader.GetEvents(
     machineName: "sv-server" // set to null for local machine
 	);
 	
-foreach (var session in events)
+foreach (var event in events)
 {
-    Console.WriteLine($"{session.Date:yyyy-MM-dd} | {session.UserName} | Start: {session.Start} | End: {session.End} | Total: {session.TotalDuration}");
+    Console.WriteLine($"{event.Date:yyyy-MM-dd} | {event.UserName} | ConnectTime: {event.ConnectTime} | DisconnectTime: {event.DisconnectTime} | DurationSeconds: {event.DurationSeconds}");
 }	
 
 // Calculate per-user summary sessions (start, end, total duration)
