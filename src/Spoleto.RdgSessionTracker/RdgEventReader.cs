@@ -21,6 +21,10 @@ namespace Spoleto.RdgSessionTracker
             RegexOptions.Compiled
         );
 
+        /// <summary>
+        /// Loads user events.
+        /// </summary>
+        /// <returns></returns>
         public List<RdgEvent> GetEvents(DateTime since, DateTime to, string? machineName = null)
         {
             var events = new List<RdgEvent>();
@@ -148,6 +152,58 @@ namespace Spoleto.RdgSessionTracker
                     return new UserSummarySession(g.Key, start, lastDisconnect, totalDuration);
                 })
                 .ToList();
+        }
+
+        /// <summary>
+        /// Loads user events and merges consecutive events per user if the gap between them is ≤ <paramref name="maxGap"/>.
+        /// </summary>
+        /// <remarks>
+        /// DurationSeconds = (Disconnect - Connect).TotalSeconds
+        /// </remarks>
+        public List<RdgEvent> GetMergedEvents(DateTime since, DateTime to, TimeSpan? maxGap, string? machineName = null)
+        {
+            var events = GetEvents(since, to, machineName);
+
+            return events
+               .OrderBy(e => e.ConnectTime)
+               .GroupBy(e => e.UserName.ToLowerInvariant())
+               .SelectMany(group =>
+               {
+                   var result = new List<RdgEvent>();
+
+                   foreach (var current in group)
+                   {
+                       if (result.Count == 0)
+                       {
+                           result.Add(current);
+                           continue;
+                       }
+
+                       var last = result[^1];
+                       var gap = current.ConnectTime - last.DisconnectTime;
+
+                       if (gap <= maxGap)
+                       {
+                           // Merge sessions
+                           var merged = new RdgEvent(
+                               current.DisconnectTime,
+                               last.UserName,
+                               last.ClientIp,
+                               last.Resource,
+                               (int)(current.DisconnectTime - last.ConnectTime).TotalSeconds,
+                               last.Protocol);
+
+                           result[^1] = merged;
+                       }
+                       else
+                       {
+                           result.Add(current);
+                       }
+                   }
+
+                   return result;
+               })
+               .ToList();
         }
     }
 }

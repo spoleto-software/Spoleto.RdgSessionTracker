@@ -55,6 +55,19 @@ foreach (var session in summarySessions)
         $"{session.UserName}: Start={session.Start}, End={session.End}, Total={session.TotalDuration}"
     );
 }
+
+// Loads user events and merges consecutive events per user with DurationSeconds = (Disconnect - Connect).TotalSeconds.
+var mergedEvents = reader.GetMergedEvents(
+    since: DateTime.Today.AddDays(-1),
+    to: DateTime.Today,
+    maxGap: TimeSpan.FromMinutes(1),
+    machineName: "sv-server" // set to null for local machine
+	);
+
+foreach (var event in mergedEvents)
+{
+    Console.WriteLine($"{event.Date:yyyy-MM-dd} | {event.UserName} | ConnectTime: {event.ConnectTime} | DisconnectTime: {event.DisconnectTime} | DurationSeconds: {event.DurationSeconds}");
+}
 ```
 
 ## Event Source
