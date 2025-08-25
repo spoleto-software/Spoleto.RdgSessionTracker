@@ -56,7 +56,7 @@ foreach (var session in summarySessions)
     );
 }
 
-// Loads user events and merges consecutive events per user with DurationSeconds = (Disconnect - Connect).TotalSeconds.
+// Loads user events and merges consecutive events per user with DurationSeconds = (Disconnect - Connect).TotalSeconds
 var mergedEvents = reader.GetMergedEvents(
     since: DateTime.Today.AddDays(-1),
     to: DateTime.Today,
