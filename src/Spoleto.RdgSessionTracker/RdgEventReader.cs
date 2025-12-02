@@ -22,6 +22,11 @@ namespace Spoleto.RdgSessionTracker
         );
 
         /// <summary>
+        ///  Overlap within 1 minute -> merge two session into one
+        /// </summary>
+        private const int ToleranceSeconds = 60;
+
+        /// <summary>
         /// Loads user events.
         /// </summary>
         /// <returns></returns>
@@ -114,8 +119,15 @@ namespace Spoleto.RdgSessionTracker
                             {
                                 overlapFound = true;
 
-                                // keep the longest
-                                if (current.DurationSeconds > existing.DurationSeconds)
+                                if (existing.DisconnectTime - current.ConnectTime < TimeSpan.FromSeconds(ToleranceSeconds))
+                                {
+                                    var overlapSeconds = (existing.DisconnectTime > current.DisconnectTime ? current.DisconnectTime : existing.DisconnectTime) // min date
+                                                        - (existing.ConnectTime > current.ConnectTime ? existing.ConnectTime : current.ConnectTime); // max date
+
+                                    var totalDuration = existing.DurationSeconds + current.DurationSeconds - (int)overlapSeconds.TotalSeconds;
+                                    result[i] = new RdgEvent(current.DisconnectTime, existing.UserName, existing.ClientIp, existing.Resource, totalDuration, existing.Protocol);
+                                }
+                                else if (current.DurationSeconds > existing.DurationSeconds) // keep the longest
                                 {
                                     result[i] = current;
                                 }
