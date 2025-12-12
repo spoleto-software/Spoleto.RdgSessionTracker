@@ -121,11 +121,14 @@ namespace Spoleto.RdgSessionTracker
 
                                 if (existing.DisconnectTime - current.ConnectTime < TimeSpan.FromSeconds(ToleranceSeconds))
                                 {
-                                    var overlapSeconds = (existing.DisconnectTime > current.DisconnectTime ? current.DisconnectTime : existing.DisconnectTime) // min date
-                                                        - (existing.ConnectTime > current.ConnectTime ? existing.ConnectTime : current.ConnectTime); // max date
+                                    var maxConnect = existing.ConnectTime > current.ConnectTime ? existing.ConnectTime : current.ConnectTime;
+                                    var minDisconnect = existing.DisconnectTime > current.DisconnectTime ? current.DisconnectTime : existing.DisconnectTime;
+                                    var maxDisconnect = existing.DisconnectTime > current.DisconnectTime ? existing.DisconnectTime : current.DisconnectTime;
+                                    
+                                    var overlapSeconds = minDisconnect - maxConnect;
 
                                     var totalDuration = existing.DurationSeconds + current.DurationSeconds - (int)overlapSeconds.TotalSeconds;
-                                    result[i] = new RdgEvent(current.DisconnectTime, existing.UserName, existing.ClientIp, existing.Resource, totalDuration, existing.Protocol);
+                                    result[i] = new RdgEvent(maxDisconnect, existing.UserName, existing.ClientIp, existing.Resource, totalDuration, existing.Protocol);
                                 }
                                 else if (current.DurationSeconds > existing.DurationSeconds) // keep the longest
                                 {
